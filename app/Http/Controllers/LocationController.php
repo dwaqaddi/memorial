@@ -18,8 +18,8 @@ class LocationController extends Controller
 
     public function index()
     {
-        // $reservation = Reservation::all();
-        // return response()->json($reservation, 201);
+        $reservation = Lot::all();
+        return response()->json($reservation, 201);
     }
 
     public function showBlockSections()
@@ -138,9 +138,10 @@ class LocationController extends Controller
 
                $locations = DB::select(
             '       
-                    SELECT 
+                    SELECT
                     
                         l.lotId,
+                        
                         b.lat,
                         b.lng,
                         b.isWayFind,
@@ -157,11 +158,8 @@ class LocationController extends Controller
 
                     FROM lots l
 
-
                     LEFT JOIN Blocks b
                     ON l.blockId = b.blocksLocationsId
-                    -- AND l.lotId = ?
-
 
                     LEFT JOIN BlockSections bs
                     ON b.blocksLocationsId = bs.blockNumber
@@ -172,6 +170,7 @@ class LocationController extends Controller
                     LEFT JOIN sections sec
                     ON bs.sectionId = sec.sectionsId
 
+                    WHERE l.lotId = ?
 
                  '
             ,[$lotId]
